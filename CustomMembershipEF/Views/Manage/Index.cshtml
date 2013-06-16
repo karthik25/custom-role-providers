@@ -1,0 +1,55 @@
+﻿@using CustomMembershipEF.Controllers
+@model List<CustomMembershipEF.Entities.User>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<script type="text/javascript">
+    $(function() {
+        $('.btn-update').click(function () {
+            var element = this;
+            var root = '@Url.Content("~")';
+            $('#loadingElement').show();
+            $.ajax({
+                type: 'GET',
+                url: root + 'Manage/UpdateRole',
+                data: { 'userId': $(this).attr('data-id'), 'roleId': $(element).prev().val() },
+                dataType: 'json',
+                success: function() {
+                    $('#loadingElement').hide();
+                },
+                error: function (req, status, err) {
+                    alert('unable to update the role, sorry, pls. try again... ' + err);
+                    $('#loadingElement').hide();
+                }
+            });
+        });
+    });
+</script>
+
+<h2>
+    Index
+    <img src="@Url.Content("~/Content/loader-transparent.gif")" alt="" id="loadingElement" style="display: none"/>
+</h2>
+
+<table>
+    <tr>
+        <th>Username</th>
+        <th>Role</th>
+    </tr>
+    @foreach (var user in Model)
+    {
+        <tr>
+            <td>@user.UserName</td>
+            <td>
+                @{
+                    var roleId = user.UserRoles != null && user.UserRoles.Any() ? user.UserRoles.First().RoleId : (short)2;
+                }
+
+                @Html.DropDownList(string.Format("User_{0}", user.UserId), ListProvider.GetRoles(roleId), new {  })
+                <input type="button" data-id="@user.UserId" value="set" class="btn-update" />                
+            </td>
+        </tr>
+    }
+</table>
