@@ -15,6 +15,9 @@ CREATE TABLE [dbo].[Users](
     IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 
+/* Insert default user - password: "administrator" */
+INSERT INTO dbo.Users VALUES('administrator','200ceb26807d6bf99fd6f4f0d1ca54d4','test@mail.com');
+
 /* Roles table */
 SET ANSI_NULLS ON
 GO
@@ -77,3 +80,6 @@ GO
 
 ALTER TABLE [dbo].[UserRoles] CHECK CONSTRAINT [FK_UserRoles_Users]
 GO
+
+/* Insert default role */
+INSERT INTO dbo.UserRoles VALUES (1,0);
